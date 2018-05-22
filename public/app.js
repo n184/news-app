@@ -1,9 +1,16 @@
 // Grab the articles as a json
 $.getJSON("/articles", function(data) {
   // For each one
+  console.log(data);
   for (var i = 0; i < data.length; i++) {
     // Display the apropos information on the page
-    $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+    $("#articles").append("<p data-id='" + data[i]._id  + ">" + data[i].title +"</p>"+ "<br>" + "<p>" + data[i].link + "</p>");
+
+   var picture = $("<img>")
+      picture.attr("src", data[i].pic);
+      //picture.attr("id", imginput);
+    $("#articles").append(picture)
+
   }
 });
 
@@ -23,6 +30,13 @@ $(document).on("click", "p", function() {
     // With that done, add the note information to the page
     .then(function(data) {
       console.log(data);
+      // The image of the article
+      var picture = $("<img>");
+      picture.addClass("imginput");
+      picture.attr("src", data.pic);
+      //picture.attr("id", imginput);
+      
+      $("#notes").append(picture);
       // The title of the article
       $("#notes").append("<h2>" + data.title + "</h2>");
       // An input to enter a new title
@@ -34,6 +48,7 @@ $(document).on("click", "p", function() {
 
       // If there's a note in the article
       if (data.note) {
+        $(".imginput").val(data.note.pic);
         // Place the title of the note in the title input
         $("#titleinput").val(data.note.title);
         // Place the body of the note in the body textarea
@@ -52,6 +67,7 @@ $(document).on("click", "#savenote", function() {
     method: "POST",
     url: "/articles/" + thisId,
     data: {
+      pic: $("#imginput").val(),
       // Value taken from title input
       title: $("#titleinput").val(),
       // Value taken from note textarea
@@ -67,6 +83,7 @@ $(document).on("click", "#savenote", function() {
     });
 
   // Also, remove the values entered in the input and textarea for note entry
+  $("#imginput").val("");
   $("#titleinput").val("");
   $("#bodyinput").val("");
 });
