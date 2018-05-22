@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/week18Populater");
+mongoose.connect("mongodb://localhost/newsPopulater");
 
 // Routes
 
@@ -79,16 +79,17 @@ app.get("/scrape", function(req, res) {
             .children("a")
                 // .children("a")
                 .text();
-            result.link = $(this)
+            result.summary = $(this)
             .children(".item-info")
-            .children("h2")
+            .children("p")
             .children("a")
-                .attr("href");
+               // .attr("href");
+            .text()
 
                 console.log(result)
 
                 //if statment to make sure the data exsit
-                
+
 
             // Create a new Article using the `result` object built from scraping
             db.FinArticle.create(result)

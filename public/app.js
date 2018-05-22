@@ -4,8 +4,7 @@ $.getJSON("/articles", function(data) {
   console.log(data);
   for (var i = 0; i < data.length; i++) {
     // Display the apropos information on the page
-    $("#articles").append("<p data-id='" + data[i]._id  + ">" + data[i].title +"</p>"+ "<br>" + "<p>" + data[i].link + "</p>");
-
+ $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].summary + "</p>"); 
    var picture = $("<img>")
       picture.attr("src", data[i].pic);
       //picture.attr("id", imginput);
@@ -67,7 +66,7 @@ $(document).on("click", "#savenote", function() {
     method: "POST",
     url: "/articles/" + thisId,
     data: {
-      pic: $("#imginput").val(),
+      pic: $(".imginput").val(),
       // Value taken from title input
       title: $("#titleinput").val(),
       // Value taken from note textarea
@@ -83,7 +82,7 @@ $(document).on("click", "#savenote", function() {
     });
 
   // Also, remove the values entered in the input and textarea for note entry
-  $("#imginput").val("");
+  $(".imginput").val("");
   $("#titleinput").val("");
   $("#bodyinput").val("");
 });
