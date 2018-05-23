@@ -37,59 +37,69 @@ app.get("/scrape", function(req, res) {
     axios.get("https://www.npr.org/sections/news/").then(function(response) {
         // Then, we load that into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(response.data);
-/*
-        $("article a").each(function(i, element) {
-            // Save an empty result object
-            var pic = {};
+        /*
+                $("article a").each(function(i, element) {
+                    // Save an empty result object
+                    var pic = {};
 
 
-            pic.image = $(this)
-                .children("img.respArchListImg")
-                .attr("src");
-                console.log("pic", pic);
+                    pic.image = $(this)
+                        .children("img.respArchListImg")
+                        .attr("src");
+                        console.log("pic", pic);
 
-            db.FinArticle.create(pic)
-                .then(function(dbFinArticle) {
-                    // View the added result in the console
-                    console.log(dbFinArticle);
-                })
-                .catch(function(err) {
-                    // If an error occurred, send it to the client
-                    return res.json(err);
+                    db.FinArticle.create(pic)
+                        .then(function(dbFinArticle) {
+                            // View the added result in the console
+                            console.log(dbFinArticle);
+                        })
+                        .catch(function(err) {
+                            // If an error occurred, send it to the client
+                            return res.json(err);
+                        });
                 });
-        });
-*/
+        */
         // Now, we grab every h2 within an article tag, and do the following:
         $("article").each(function(i, element) {
             // Save an empty result object
             var result = {};
 
             // Add the text and href of every link, and save them as properties of the result object
-                result.pic = $(this)
+            result.pic = $(this)
                 .children("div.item-image")
                 .children("div.imagewrap")
-                .children("a") 
-                    
-              .children("img.respArchListImg")
-              .attr("src");
- 
+                .children("a")
+
+                .children("img.respArchListImg")
+                .attr("src");
+
             result.title = $(this)
-            .children(".item-info")
-            .children("h2")
-            .children("a")
+                .children(".item-info")
+                .children("h2")
+                .children("a")
                 // .children("a")
                 .text();
             result.summary = $(this)
-            .children(".item-info")
-            .children("p")
-            .children("a")
-               // .attr("href");
-            .text()
+                .children(".item-info")
+                .children("p")
+                .children("a")
+                // .attr("href");
+                .text()
 
-                console.log(result)
+            result.link = $(this)
+                .children(".item-info")
+                .children("h2")
+                .children("a")
+                .attr("href");
 
-                //if statment to make sure the data exsit
+            console.log(result)
 
+            //if statment to make sure the data exsit
+            if (!result.pic) {
+
+                var picture = "There is no picture found at this time";
+                result.pic = picture;
+            }
 
             // Create a new Article using the `result` object built from scraping
             db.FinArticle.create(result)
@@ -114,7 +124,7 @@ app.get("/articles", function(req, res) {
     // Grab every document in the Articles collection
     db.FinArticle.find({})
         .then(function(dbFinArticle) {
-          console.log(dbFinArticle);
+            console.log(dbFinArticle);
             // If we were able to successfully find Articles, send them back to the client
             res.json(dbFinArticle);
         })
