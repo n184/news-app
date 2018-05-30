@@ -5,6 +5,7 @@ $.getJSON("/articles", function(data) {
 
   for (var i = 0; i < data.length; i++) {
     // Display the apropos information on the page
+  
 
  $(".article").append("<p data-id='" + data[i]._id + "'> <b>" + data[i].title + " </b> <br />" + data[i].summary + "<br />" + data[i].link + "</p>"); 
    var picture = $("<img>")
@@ -18,6 +19,21 @@ $.getJSON("/articles", function(data) {
   }
 });
 
+   
+  /*
+   var p = $("<p data-id='" + data[i]._id + "'> <b>" + data[i].title + " </b> <br />" + data[i].summary + "<br />" + data[i].link + "</p>");
+   var picture = $("<img>")
+   picture.attr("src", data[i].pic);
+   if (data[i].pic == "There is no picture found at this time") {
+      picture.attr("src", "./img/newsletters.jpg")
+   }
+   p.append(picture);
+      //picture.attr("id", imginput);
+    $(".article").append(p);
+    //$(".article").append("<hr>");
+  }
+});
+ */
 
 // Whenever someone clicks a p tag
 $(document).on("click", "p", function() {
